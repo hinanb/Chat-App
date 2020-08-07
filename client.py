@@ -1,6 +1,17 @@
 import socket
 import threading
 import time
+#db config
+import mysql.connector
+
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  database="cnet"
+)
+
+mycursor = mydb.cursor()
+
 
 tLock = threading.Lock()
 shutdown = False
@@ -30,10 +41,24 @@ rT = threading.Thread(target=receving, args=("RecvThread",s))
 rT.start()
 
 alias = input("Name: ")
+mycursor.execute("SELECT * FROM chat where user= '%s'" % alias)
+
+myresult = mycursor.fetchall()
+try:
+    for result in myresult:
+        print(result)
+except:
+    print("New User")
+
 message = input(alias + "-> ")
 while message != 'q':
     if message != '':
         s.sendto(bytes(alias + ": " + message, 'utf-8'), server)
+        sql = "INSERT INTO chat (user, message) VALUES (%s, %s)"
+        val = (alias, message)
+        mycursor.execute(sql, val)
+        mydb.commit()
+
     tLock.acquire()
     message = input(alias + "-> ")
     tLock.release()
