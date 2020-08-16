@@ -3,13 +3,11 @@ import threading
 import time
 #db config
 import mysql.connector
-
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
   database="cnet"
 )
-
 mycursor = mydb.cursor()
 
 
@@ -27,9 +25,14 @@ def receving(name, sock):
             pass
         finally:
             tLock.release()
+''' for diff comm communication
+host = '127.168.10.7'
+port = 4005
+server = ('127.168.10.10',4000)
+''' #ends here
 
-host = '127.0.0.1'
-port = 0
+host = '127.0.0.1' 
+port = 5005 
 
 server = ('127.0.0.1',5000)
 
@@ -61,6 +64,18 @@ while message != 'q':
 
     tLock.acquire()
     message = input(alias + "-> ")
+    if message =='f':
+        filesignal='f'
+        filename= input(str("please enter the file name of file : "))
+        file = open(filename, 'rb')
+        
+        file_data=file.read(1024)
+        print(str(file_data))
+        s.sendto(bytes(filesignal+str(file_data), 'utf-8'), server)
+        
+        #s.sendto(bytes(file_data),server)
+        print("Data has been transmitted successfully")
+
     tLock.release()
     time.sleep(0.2)
 
