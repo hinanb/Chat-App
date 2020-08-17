@@ -2,7 +2,7 @@ import socket
 import time
 #db config
 '''
-import mysql.connector
+import mysql.connector   #database connectivity
 mydb = mysql.connector.connect(
   host="localhost",
   user="root",
@@ -20,19 +20,19 @@ port = 4000
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 serverSocket.bind((host, port))
 ''' #differnt comm ends here
- for same pc communication
-host = '127.0.0.1' # <a class="zem_slink" title="Localhost" href="http://en.wikipedia.org/wiki/Localhost" rel="wikipedia">Loopback address</a> for the port
+ #for same pc communication
+host = '127.0.0.1' 
 port = 5000 # Port assigned after the range of reserved ports i.e. 1025
 
 clients = [] # Now clients can be many, so this list maintains the clients.
 
-serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # Using <a class="zem_slink" title="User Datagram Protocol" href="http://en.wikipedia.org/wiki/User_Datagram_Protocol" rel="wikipedia">UDP</a> protocol
+serverSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
 serverSocket.bind((host,port))
 serverSocket.setblocking(0)
 
 quitting = False
 print("Server Started.")
-while not quitting:
+while not quitting:              #loop for contineouse chat.
     try:
         data, addr = serverSocket.recvfrom(1024) # Here, 1024 is the buffer, which can be set to any value
         print(str(data))
@@ -55,7 +55,7 @@ while not quitting:
         pass
 
 '''
-sql = "INSERT INTO chat (user, message) VALUES (%s, %s)"
+sql = "INSERT INTO chat (user, message) VALUES (%s, %s)" 
 val = (str(addtr), str(data))
 mycursor.execute(sql, val)
 mydb.commit()
